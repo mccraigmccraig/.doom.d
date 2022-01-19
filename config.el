@@ -57,6 +57,12 @@
 ;; never insert a tab
 (setq tab-always-indent t)
 
+;; mark long lines everywhere
+(setq whitespace-style
+      '(face indentation tabs tab-mark trailing lines-tail lines))
+(setq whitespace-line-column 80)
+(global-whitespace-mode)
+
 (after! smartparens
   ;; the default module config/default/config.el:L107:L115
   ;; has been copied to local config and had the behaviour to
