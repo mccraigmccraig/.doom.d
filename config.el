@@ -72,3 +72,8 @@
 
   ;; https://github.com/Fuco1/smartparens/blob/master/smartparens.el#L300
   (sp-use-smartparens-bindings))
+
+(map!
+ (:after smartparens
+  :map smartparens-mode-map
+  "C-M-z" #'smartparens-strict-mode))
