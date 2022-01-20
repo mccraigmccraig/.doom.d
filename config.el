@@ -64,10 +64,7 @@
 (global-whitespace-mode)
 
 (after! smartparens
-  ;; the default module config/default/config.el:L107:L115
-  ;; has been copied to local config and had the behaviour to
-  ;; ignore autopairing braces before words removed ... maybe
-  ;; this could be done in a less heavy-handed way here ^0^
+
   (smartparens-global-strict-mode)
 
   ;; https://github.com/Fuco1/smartparens/blob/master/smartparens.el#L300
