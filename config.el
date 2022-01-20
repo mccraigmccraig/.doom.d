@@ -71,7 +71,16 @@
   (smartparens-global-strict-mode)
 
   ;; https://github.com/Fuco1/smartparens/blob/master/smartparens.el#L300
-  (sp-use-smartparens-bindings))
+  (sp-use-smartparens-bindings)
+
+  ;; undo the damage done by
+  ;; https://github.com/hlissner/doom-emacs/blob/develop/modules/config/default/config.el#L107
+  ;; so we get matching parens when point is before a word again
+  (dolist (brace '("(" "{" "["))
+    (sp-pair brace nil
+             :post-handlers '(("||\n[i]" "RET") ("| " "SPC"))
+             :unless '()))
+  )
 
 (map!
  (:after smartparens
