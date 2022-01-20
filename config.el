@@ -68,12 +68,7 @@
   ;; has been copied to local config and had the behaviour to
   ;; ignore autopairing braces before words removed ... maybe
   ;; this could be done in a less heavy-handed way here ^0^
-  (smartparens-global-strict-mode))
+  (smartparens-global-strict-mode)
 
-(map!
- (:after smartparens
-  :map smartparens-mode-map
-  "C-<right>" #'sp-forward-slurp-sexp
-  "C-<left>" #'sp-forward-barf-sexp
-  "C-M-<left>" #'sp-backward-slurp-sexp
-  "C-M-<right>" #'sp-backward-barf-sexp))
+  ;; https://github.com/Fuco1/smartparens/blob/master/smartparens.el#L300
+  (sp-use-smartparens-bindings))
