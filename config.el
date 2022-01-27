@@ -57,6 +57,9 @@
 ;; never insert a tab
 (setq tab-always-indent t)
 
+;; display ace-window key in the modeline
+(ace-window-display-mode)
+
 ;; mark long lines everywhere
 (setq whitespace-style
       '(face indentation tabs tab-mark trailing lines-tail lines))
@@ -76,10 +79,20 @@
   (dolist (brace '("(" "{" "["))
     (sp-pair brace nil
              :post-handlers '(("||\n[i]" "RET") ("| " "SPC"))
-             :unless '()))
-  )
+             :unless '())))
 
 (map!
  (:after smartparens
   :map smartparens-mode-map
   "C-M-z" #'smartparens-strict-mode))
+
+(map!
+ (:after avy
+  :map doom-leader-map
+  "j" #'avy-goto-char))
+
+;; get rid of the annoying mouse-wheel text-scaling
+;; which interacts badly with my screen-zoom
+(map!
+ "C-<wheel-down>" nil
+ "C-<wheel-up>" nil)
