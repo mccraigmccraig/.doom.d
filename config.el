@@ -91,8 +91,13 @@
   :map doom-leader-map
   "j" #'avy-goto-char))
 
-;; get rid of the annoying mouse-wheel text-scaling
-;; which interacts badly with my screen-zoom
+;; get rid of some annoying bindings
 (map!
+ ;; get rid of the annoying mouse-wheel text-scaling
+ ;; which interacts badly with my screen-zoom
  "C-<wheel-down>" nil
- "C-<wheel-up>" nil)
+ "C-<wheel-up>" nil
+
+ ;; get rid of C-z suspend-frame which i keep on hitting
+ ;; when going for C-` +popup/toggle
+ "C-z" nil)
