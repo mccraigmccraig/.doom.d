@@ -101,3 +101,15 @@
  ;; get rid of C-z suspend-frame which i keep on hitting
  ;; when going for C-` +popup/toggle
  "C-z" nil)
+
+;; doom has its own auto-revert stuff, so
+;; this shouldn't be necessary... but i observed some
+;; files not being auto-reverted when i thought they should be
+;; (setq auto-revert-use-notify t)
+;; (global-auto-revert-mode t)
+
+
+;; black background plz - this makes all backgrounds black,
+;; but obvs royally screws up light themes - i don't care
+;; i just want max contrast dark themes
+(custom-set-faces '(default ((t (:background "#000000")))))
