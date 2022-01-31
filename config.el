@@ -102,6 +102,11 @@
  ;; when going for C-` +popup/toggle
  "C-z" nil)
 
+(map!
+ ;; don't show the messages buffer on minibuffer click
+ (:map minibuffer-inactive-mode-map
+  "<mouse-1>" #'ignore))
+
 ;; doom has its own auto-revert stuff, so
 ;; this shouldn't be necessary... but i observed some
 ;; files not being auto-reverted when i thought they should be
