@@ -54,7 +54,14 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;; never insert a tab
+;;;; my customisations
+
+;; black background plz - this makes all backgrounds black,
+;; but obvs royally screws up light themes - i don't care
+;; i just want max contrast dark themes
+(custom-set-faces '(default ((t (:background "#000000")))))
+
+;; never insert a tab character
 (setq tab-always-indent t)
 
 ;; display ace-window key in the modeline
@@ -72,6 +79,12 @@
 
   ;; https://github.com/Fuco1/smartparens/blob/master/smartparens.el#L300
   (sp-use-smartparens-bindings)
+
+  ;; undo the damage done by
+  ;; https://github.com/hlissner/doom-emacs/blob/develop/modules/config/default/config.el#L97
+  ;; to double-quote autopairing - so we always get matching quotes
+  (let ((unless-list '()))
+    (sp-pair "\"" nil :unless unless-list))
 
   ;; undo the damage done by
   ;; https://github.com/hlissner/doom-emacs/blob/develop/modules/config/default/config.el#L107
@@ -114,7 +127,3 @@
 ;; (global-auto-revert-mode t)
 
 
-;; black background plz - this makes all backgrounds black,
-;; but obvs royally screws up light themes - i don't care
-;; i just want max contrast dark themes
-(custom-set-faces '(default ((t (:background "#000000")))))
