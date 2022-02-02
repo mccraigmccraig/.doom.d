@@ -111,7 +111,8 @@
 (map!
  (:after avy
   :map doom-leader-map
-  "j" #'avy-goto-char))
+  "j" #'avy-goto-char
+  "C-j" #'avy-goto-char))
 
 ;; get rid of some annoying bindings
 (map!
