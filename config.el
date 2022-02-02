@@ -54,33 +54,35 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;;;; my customisations
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;; my customisations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;; trivia
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; black background plz - this makes all backgrounds black,
 ;; but obvs royally screws up light themes - i don't care
 ;; i just want max contrast dark themes
 (custom-set-faces '(default ((t (:background "#000000")))))
 
-;; the doom default is `relative-from-project, but that
-;; often causes stuff on the RH end of the modeline to get knocked
-;; off when showing 3 windows side-by-side,
-;; so this is more compact
-;; https://github.com/seagle0128/doom-modeline
-(setq doom-modeline-buffer-file-name-style 'truncate-with-project)
-;;(setq doom-modeline-buffer-file-name-style 'auto)
-;;(setq doom-modeline-buffer-file-name-style 'relative-to-project)
-
 ;; never insert a tab character
 (setq tab-always-indent t)
-
-;; display ace-window key in the modeline
-(ace-window-display-mode)
 
 ;; mark long lines everywhere
 (setq whitespace-style
       '(face indentation tabs tab-mark trailing lines-tail lines))
 (setq whitespace-line-column 80)
 (global-whitespace-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;; smartparens
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (after! smartparens
 
@@ -103,15 +105,38 @@
              :post-handlers '(("||\n[i]" "RET") ("| " "SPC"))
              :unless '())))
 
-;; custom modeline (working with +light option rather than full doom-modeline)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;; modeline
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; the doom default is `relative-from-project, but that
+;; often causes stuff on the RH end of the modeline to get knocked
+;; off when showing 3 windows side-by-side,
+;; so this is more compact
+;; https://github.com/seagle0128/doom-modeline
+;;
+;;(setq doom-modeline-buffer-file-name-style 'truncate-with-project)
+;;(setq doom-modeline-buffer-file-name-style 'auto)
+;;(setq doom-modeline-buffer-file-name-style 'relative-to-project)
+
+;; display ace-window key in the modeline
+;; using +light modeline now, so +modeline-ace-window below
+;; is also required
+(ace-window-display-mode)
+
+(def-modeline-var! +modeline-ace-window
+  '(:eval (window-parameter (selected-window) 'ace-window-path)))
+
+;; custom +light modeline (using +light option rather than full doom-modeline)
 ;; modified from
 ;; https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/modeline/%2Blight.el#L525
-;; to move flycheck left to prominence
+;; to move flycheck left to prominence and add ace-window-path
 (def-modeline! :main
-  `(""
-    +modeline-matches
-    ""
+  `(" "
+    +modeline-ace-window
+    " "
     (+modeline-checker ("" +modeline-checker " "))
+    +modeline-matches
     +modeline-buffer-identification
     +modeline-position)
   `(""
@@ -124,6 +149,11 @@
     +modeline-encoding))
 
 (set-modeline! :main 'default)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;; bindings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;; give smartparens strict-mode a binding
 (map!
