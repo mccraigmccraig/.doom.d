@@ -133,6 +133,7 @@
 ;; doom has its own auto-revert stuff, so
 ;; this shouldn't be necessary... but i observed some
 ;; files not being auto-reverted when i thought they should be
+;; ... update... this didn't achieve anything anyway
 ;; (setq auto-revert-use-notify t)
 ;; (global-auto-revert-mode t)
 
