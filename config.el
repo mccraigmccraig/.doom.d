@@ -61,6 +61,15 @@
 ;; i just want max contrast dark themes
 (custom-set-faces '(default ((t (:background "#000000")))))
 
+;; the doom default is `relative-from-project, but that
+;; often causes stuff on the RH end of the modeline to get knocked
+;; off when showing 3 windows side-by-side,
+;; so this is more compact
+;; https://github.com/seagle0128/doom-modeline
+(setq doom-modeline-buffer-file-name-style 'truncate-with-project)
+;;(setq doom-modeline-buffer-file-name-style 'auto)
+;;(setq doom-modeline-buffer-file-name-style 'relative-to-project)
+
 ;; never insert a tab character
 (setq tab-always-indent t)
 
