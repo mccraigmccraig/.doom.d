@@ -103,11 +103,35 @@
              :post-handlers '(("||\n[i]" "RET") ("| " "SPC"))
              :unless '())))
 
+;; custom modeline (working with +light option rather than full doom-modeline)
+;; modified from
+;; https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/modeline/%2Blight.el#L525
+;; to move flycheck left to prominence
+(def-modeline! :main
+  `(""
+    +modeline-matches
+    ""
+    (+modeline-checker ("" +modeline-checker " "))
+    +modeline-buffer-identification
+    +modeline-position)
+  `(""
+    mode-line-misc-info
+    +modeline-modes
+    (vc-mode ("  "
+              ,(all-the-icons-octicon "git-branch" :v-adjust 0.0)
+              vc-mode " "))
+    "  "
+    +modeline-encoding))
+
+(set-modeline! :main 'default)
+
+;; give smartparens strict-mode a binding
 (map!
  (:after smartparens
   :map smartparens-mode-map
   "C-M-z" #'smartparens-strict-mode))
 
+;; give avy-jump a binding
 (map!
  (:after avy
   :map doom-leader-map
