@@ -191,4 +191,7 @@
 ;; (setq auto-revert-use-notify t)
 ;; (global-auto-revert-mode t)
 
-
+;; search from CWD rather than project is a thing!
+(map!
+ (:map doom-leader-search-map
+  "c" #'+vertico/project-search-from-cwd))
