@@ -76,7 +76,7 @@
 
 ;; mark long lines everywhere
 (setq whitespace-style
-      '(face indentation tabs tab-mark trailing lines-tail lines))
+      '(face indentation tabs tab-mark trailing lines-tail))
 (setq whitespace-line-column 80)
 (global-whitespace-mode)
 
