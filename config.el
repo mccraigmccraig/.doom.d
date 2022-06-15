@@ -110,7 +110,31 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (after! vertico
-  (setq vertico-sort-function #'vertico-sort-alpha))
+
+  ;; default sort function
+  (setq vertico-sort-function #'vertico-sort-history-alpha)
+
+  ;; Enable vertico-multiform
+  (vertico-multiform-mode)
+
+  (setq vertico-multiform-categories
+        '((file (vertico-sort-function . vertico-sort-alpha))))
+
+  (setq vertico-multiform-commands
+        '(;; present matching files in strict alpha order
+          (projectile-find-file (vertico-sort-function . vertico-sort-alpha))
+
+          ;; i would like to present project text-search results in strict alpha
+          ;; order too, but even when the global default is #'vertico-sort-alpha
+          ;; this doesn't work
+          ;;
+          ;; this doesn't work because consult-ripgrep
+          ;; (which is used by these fns) does not send a "--sort path" arg to
+          ;; rg (perhaps because it might be slower) - so path sorting is not
+          ;; currently available to project-wide text-search
+          (+default/search-project (vertico-sort-function . vertico-sort-alpha))
+          (+vertico/project-search (vertico-sort-function . vertico-sort-alpha))
+          (projectile-ripgrep (vertico-sort-function . vertico-sort-alpha)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;; modeline
