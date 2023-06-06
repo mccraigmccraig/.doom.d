@@ -205,6 +205,7 @@
  ;; which interacts badly with my screen-zoom
  "C-<wheel-down>" nil
  "C-<wheel-up>" nil
+ "<pinch>" nil
 
  ;; get rid of C-z suspend-frame which i keep on hitting
  ;; when going for C-` +popup/toggle
