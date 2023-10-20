@@ -69,7 +69,7 @@
 ;; black background plz - this makes all backgrounds black,
 ;; but obvs royally screws up light themes - i don't care
 ;; i just want max contrast dark themes
-(custom-set-faces '(default ((t (:background "#000000")))))
+;; (custom-set-faces '(default ((t (:background "#000000")))))
 
 ;; never insert a tab character
 (setq tab-always-indent t)
@@ -174,7 +174,7 @@
     mode-line-misc-info
     +modeline-modes
     (vc-mode ("  "
-              ,(all-the-icons-octicon "git-branch" :v-adjust 0.0)
+              , ;; (all-the-icons-octicon "git-branch" :v-adjust 0.0)
               vc-mode " "))
     "  "
     +modeline-encoding))
@@ -230,3 +230,90 @@
 ;; ... update... this didn't achieve anything anyway
 ;; (setq auto-revert-use-notify t)
 ;; (global-auto-revert-mode t)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;; combobulate / tree-sitter
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; ;; install a couple of tree-sitter langs
+(after! treesit
+  (add-to-list 'treesit-language-source-alist '(tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
+  ;; (treesit-install-language-grammar 'tsx)
+  (add-to-list 'treesit-language-source-alist '(typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")))
+  ;; (treesit-install-language-grammar 'typescript)
+  )
+
+(use-package typescript-ts-mode
+  :mode (("\\.ts\\'" . typescript-ts-mode)
+         ("\\.tsx\\'" . tsx-ts-mode))
+  :config
+  (add-hook! '(typescript-ts-mode-hook tsx-ts-mode-hook) #'lsp!))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;; combobulate ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; should have another go at getting this running now that
+;; treesit + lsp is working for typescript
+
+;; `M-x combobulate' (default: `C-c o o') to start using Combobulate
+;; (use-package treesit
+;;   :preface
+;;   (defun mp-setup-install-grammars ()
+;;     "Install Tree-sitter grammars if they are absent."
+;;     (interactive)
+;;     (dolist (grammar
+;;              '((css "https://github.com/tree-sitter/tree-sitter-css")
+;;                (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
+;;                (python "https://github.com/tree-sitter/tree-sitter-python")
+;;                (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
+;;                (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+;;       (add-to-list 'treesit-language-source-alist grammar)
+;;       ;; Only install `grammar' if we don't already have it
+;;       ;; installed. However, if you want to *update* a grammar then
+;;       ;; this obviously prevents that from happening.
+;;       (unless (treesit-language-available-p (car grammar))
+;;         (treesit-install-language-grammar (car grammar)))))
+
+;;   ;; Optional, but recommended. Tree-sitter enabled major modes are
+;;   ;; distinct from their ordinary counterparts.
+;;   ;;
+;;   ;; You can remap major modes with `major-mode-remap-alist'. Note
+;;   ;; that this does *not* extend to hooks! Make sure you migrate them
+;;   ;; also
+;;   (dolist (mapping '((python-mode . python-ts-mode)
+;;                      (css-mode . css-ts-mode)
+;;                      (typescript-mode . tsx-ts-mode)
+;;                      (js-mode . js-ts-mode)
+;;                      (css-mode . css-ts-mode)
+;;                      (yaml-mode . yaml-ts-mode)))
+;;     (add-to-list 'major-mode-remap-alist mapping))
+
+;;   :config
+;;   (mp-setup-install-grammars))
+
+;; Do not forget to customize Combobulate to your liking:
+;;
+;;  M-x customize-group RET combobulate RET
+;;
+;; (use-package combobulate
+;;   :after (treesit)
+;;   :preface
+;;   ;; You can customize Combobulate's key prefix here.
+;;   ;; Note that you may have to restart Emacs for this to take effect!
+;;   (setq combobulate-key-prefix "C-c o")
+
+;;   ;; Optional, but recommended.
+;;   ;;
+;;   ;; You can manually enable Combobulate with `M-x
+;;   ;; combobulate-mode'.
+;;   :hook ((python-ts-mode . combobulate-mode)
+;;          (js-ts-mode . combobulate-mode)
+;;          (css-ts-mode . combobulate-mode)
+;;          (yaml-ts-mode . combobulate-mode)
+;;          (typescript-ts-mode . combobulate-mode)
+;;          (tsx-ts-mode . combobulate-mode))
+;;   ;; Amend this to the directory where you keep Combobulate's source
+;;   ;; code.
+;;   :load-path ("/Users/mccraig/.emacs.d/.local/combobulate"))
