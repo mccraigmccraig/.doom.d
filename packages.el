@@ -50,3 +50,5 @@
 ;(unpin! t)
 
 (package! all-the-icons)
+
+(package! elixir-ts-mode)

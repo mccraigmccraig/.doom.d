@@ -232,6 +232,34 @@
 ;; (global-auto-revert-mode t)
 
 
+;; this doesn't set up the auto-mode-alist mappings for
+;; elixir unfortunately - the elixir-mode stuff clashes
+;; and overrides...
+(use-package! elixir-ts-mode
+  :mode (("\\.heex\\'" . heex-ts-mode)
+         ("\\.ex\\'" . elixir-ts-mode))
+
+  :config
+  (add-hook! '(elixir-ts-mode-hook) #'lsp!))
+
+;; the doom elixir bindigs always require elixir-mode atm
+(after! elixir-mode
+
+  (setq lsp-elixir-ls-server-dir "~/bin/elixir-ls")
+  (setq lsp-elixir-local-server-command "~/bin/elixir-ls/language_server.sh")
+
+  ;; this doesn't work
+  ;; (add-to-list 'auto-mode-alist '("\\.ex\\'" . elixir-ts-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.heex\\'" . elixir-ts-mode))
+
+  ;; and this gets the right mode, but stops the LSP working 🤔
+  ;; (add-to-list 'major-mode-remap-alist
+
+  ;;              '(elixir-mode . elixir-ts-mode))
+
+  )
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;; combobulate / tree-sitter
@@ -240,12 +268,15 @@
 ;; ;; install a couple of tree-sitter langs
 (after! treesit
   (add-to-list 'treesit-language-source-alist '(tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
-  ;; (treesit-install-language-grammar 'tsx)
+
   (add-to-list 'treesit-language-source-alist '(typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")))
-  ;; (treesit-install-language-grammar 'typescript)
+
+
+  (add-to-list 'treesit-language-source-alist '(elixir . ("https://github.com/elixir-lang/tree-sitter-elixir" "main" "src")))
+  (add-to-list 'treesit-language-source-alist '(heex . ("https://github.com/phoenixframework/tree-sitter-heex" "main" "src")))
   )
 
-(use-package typescript-ts-mode
+(use-package! typescript-ts-mode
   :mode (("\\.ts\\'" . typescript-ts-mode)
          ("\\.tsx\\'" . tsx-ts-mode))
   :config
