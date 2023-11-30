@@ -26,7 +26,8 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;;(setq doom-theme 'doom-one)
-(setq doom-theme 'doom-acario-dark)
+;; (setq doom-theme 'doom-acario-dark)
+(setq doom-theme 'doom-Iosvkem)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -241,6 +242,18 @@
 
   :config
   (add-hook! '(elixir-ts-mode-hook) #'lsp!))
+
+
+;; ;; alternative elixir ls - nextls
+;; ;; tried it - it borks on some syntax, and it doesn't seem to have test
+;; ;; lenses, so not using it yet
+;; (after! lsp-mode
+;;   (lsp-register-client
+;;    (make-lsp-client :new-connection (lsp-stdio-connection '("nextls" "--stdio"))
+;;                     :multi-root t
+;;                     :activation-fn (lsp-activate-on "elixir")
+;;                     :server-id 'next-ls)))
+
 
 ;; the doom elixir bindigs always require elixir-mode atm
 (after! elixir-mode
