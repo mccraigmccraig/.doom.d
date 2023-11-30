@@ -52,3 +52,18 @@
 (package! all-the-icons)
 
 (package! elixir-ts-mode)
+
+;; all the themes from https://emacsthemes.com/tags/black/9.html
+;; tagged 'black' which have an actual black background
+(package! hemisu-theme)
+(package! danneskjold-theme)
+(package! dark-krystal-theme)
+(package! distinguished-theme)
+(package! cherry-blossom-theme)
+(package! abyss-theme)
+(package! flatland-black-theme)
+(package! nyx-theme)
+(package! ujelly-theme)
+(package! reverse-theme)
+(package! purple-haze-theme)
+(package! spacemacs-theme)
