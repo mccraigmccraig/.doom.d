@@ -3,42 +3,62 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
-
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets.
+;; clients, file templates and snippets. It is optional.
+;; (setq user-full-name "John Doe"
+;;       user-mail-address "john@doe.com")
 (setq user-full-name "mccraigmccraig of the clan mccraig"
       user-mail-address "mccraigmccraig@gmail.com")
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
-;; are the three important ones:
+;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
-;; + `doom-font'
-;; + `doom-variable-pitch-font'
-;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
+;; - `doom-font' -- the primary font to use
+;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
+;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
 ;;   presentations or streaming.
+;; - `doom-symbol-font' -- for symbols
+;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 ;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
+;; See 'C-h v doom-font' for documentation and more examples of what they
+;; accept. For example:
+;;
+;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+;;
+;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
+;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
+;; refresh your font settings. If Emacs still can't find your font, it likely
+;; wasn't installed correctly. Font issues are rarely Doom issues!
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;;(setq doom-theme 'doom-one)
-;; (setq doom-theme 'doom-acario-dark)
-(setq doom-theme 'doom-Iosvkem)
-
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+;; (setq doom-theme 'distinguished)
+(setq doom-theme 'modus-vivendi)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory "~/org/")
 
-;; Here are some additional functions/macros that could help you configure Doom:
+
+;; Whenever you reconfigure a package, make sure to wrap your config in an
+;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
+;;
+;;   (after! PACKAGE
+;;     (setq x y))
+;;
+;; The exceptions to this rule:
+;;
+;;   - Setting file/directory variables (like `org-directory')
+;;   - Setting variables which explicitly tell you to set them before their
+;;     package is loaded (see 'C-h v VARIABLE' to look up their documentation).
+;;   - Setting doom variables (which start with 'doom-' or '+').
+;;
+;; Here are some additional functions/macros that will help you configure Doom.
 ;;
 ;; - `load!' for loading external *.el files relative to this one
 ;; - `use-package!' for configuring packages
@@ -51,11 +71,11 @@
 ;; To get information about any of these functions/macros, move the cursor over
 ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
 ;; This will open documentation for it, including demos of how they are used.
+;; Alternatively, use `C-h o' to look up a symbol (functions, variables, faces,
+;; etc).
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -76,9 +96,21 @@
 (setq tab-always-indent t)
 
 ;; mark long lines everywhere
-(setq whitespace-style
-      '(face indentation tabs tab-mark trailing lines-tail))
+;; (setq whitespace-style
+;;       '(face indentation tabs tab-mark trailing lines-tail))
 (setq whitespace-line-column 80)
+
+(use-package! whitespace
+  :config
+  (setq
+   whitespace-style '(face indentation tabs tab-mark spaces space-mark trailing lines-tail newline newline-mark)
+   whitespace-display-mappings '(
+                                 ;; (space-mark   ?\     [?\u00B7]     [?.])
+                                 ;; (space-mark   ?\xA0  [?\u00A4]     [?_])
+                                 ;; (newline-mark ?\n    [?¬ ?\n])
+                                 ;; (tab-mark     ?\t    [?\u00BB ?\t] [?\\ ?\t])
+                                 )))
+
 (global-whitespace-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -156,31 +188,32 @@
 ;; is also required
 (ace-window-display-mode)
 
-(def-modeline-var! +modeline-ace-window
-  '(:eval (window-parameter (selected-window) 'ace-window-path)))
+;; TODO don't work after upgrade
+;; (def-modeline-var! +modeline-ace-window
+;;   '(:eval (window-parameter (selected-window) 'ace-window-path)))
 
 ;; custom +light modeline (using +light option rather than full doom-modeline)
 ;; modified from
 ;; https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/modeline/%2Blight.el#L525
 ;; to move flycheck left to prominence and add ace-window-path
-(def-modeline! :main
-  `(" "
-    +modeline-ace-window
-    " "
-    (+modeline-checker ("" +modeline-checker " "))
-    +modeline-matches
-    +modeline-buffer-identification
-    +modeline-position)
-  `(""
-    mode-line-misc-info
-    +modeline-modes
-    (vc-mode ("  "
-              , ;; (all-the-icons-octicon "git-branch" :v-adjust 0.0)
-              vc-mode " "))
-    "  "
-    +modeline-encoding))
+;; (def-modeline! :main
+;;   `(" "
+;;     +modeline-ace-window
+;;     " "
+;;     (+modeline-checker ("" +modeline-checker " "))
+;;     +modeline-matches
+;;     +modeline-buffer-identification
+;;     +modeline-position)
+;;   `(""
+;;     mode-line-misc-info
+;;     +modeline-modes
+;;     (vc-mode ("  "
+;;               , ;; (all-the-icons-octicon "git-branch" :v-adjust 0.0)
+;;               vc-mode " "))
+;;     "  "
+;;     +modeline-encoding))
 
-(set-modeline! :main 'default)
+;; (set-modeline! :main 'default)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;; bindings
@@ -215,7 +248,7 @@
 (map!
  ;; don't show the messages buffer on minibuffer click
  (:map minibuffer-inactive-mode-map
-  "<mouse-1>" #'ignore))
+       "<mouse-1>" #'ignore))
 
 ;; the default flycheck list stops the CIDER repl
 ;; buffer being a popup. consult-flycheck does not
@@ -225,13 +258,15 @@
   :map flycheck-command-map
   "l" #'consult-flycheck))
 
-;; doom has its own auto-revert stuff, so
-;; this shouldn't be necessary... but i observed some
-;; files not being auto-reverted when i thought they should be
-;; ... update... this didn't achieve anything anyway
-;; (setq auto-revert-use-notify t)
-;; (global-auto-revert-mode t)
-
+(with-eval-after-load 'eglot
+  (setf (alist-get '(elixir-mode elixir-ts-mode heex-ts-mode)
+                   eglot-server-programs
+                   nil nil #'equal)
+        (if (and (fboundp 'w32-shell-dos-semantics)
+                 (w32-shell-dos-semantics))
+            '("language_server.bat")
+          (eglot-alternatives
+           '("/Users/mccraigmccraig/bin/lexical/_build/dev/package/lexical/bin/start_lexical.sh")))))
 
 ;; this doesn't set up the auto-mode-alist mappings for
 ;; elixir unfortunately - the elixir-mode stuff clashes
@@ -243,121 +278,20 @@
   :config
   (add-hook! '(elixir-ts-mode-hook) #'lsp!))
 
+;; aidermacs
 
-;; ;; alternative elixir ls - nextls
-;; ;; tried it - it borks on some syntax, and it doesn't seem to have test
-;; ;; lenses, so not using it yet
-;; (after! lsp-mode
-;;   (lsp-register-client
-;;    (make-lsp-client :new-connection (lsp-stdio-connection '("nextls" "--stdio"))
-;;                     :multi-root t
-;;                     :activation-fn (lsp-activate-on "elixir")
-;;                     :server-id 'next-ls)))
+(after! epa
 
+  (load-library "/Users/mccraigmccraig/.doom.d/secrets.el.gpg")
 
-;; the doom elixir bindigs always require elixir-mode atm
-(after! elixir-mode
-
-  (setq lsp-elixir-ls-server-dir "~/bin/elixir-ls")
-  (setq lsp-elixir-local-server-command "~/bin/elixir-ls/language_server.sh")
-
-  ;; this doesn't work
-  ;; (add-to-list 'auto-mode-alist '("\\.ex\\'" . elixir-ts-mode))
-  ;; (add-to-list 'auto-mode-alist '("\\.heex\\'" . elixir-ts-mode))
-
-  ;; and this gets the right mode, but stops the LSP working 🤔
-  ;; (add-to-list 'major-mode-remap-alist
-
-  ;;              '(elixir-mode . elixir-ts-mode))
-
-  )
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;; combobulate / tree-sitter
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; ;; install a couple of tree-sitter langs
-(after! treesit
-  (add-to-list 'treesit-language-source-alist '(tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
-
-  (add-to-list 'treesit-language-source-alist '(typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")))
-
-
-  (add-to-list 'treesit-language-source-alist '(elixir . ("https://github.com/elixir-lang/tree-sitter-elixir" "main" "src")))
-  (add-to-list 'treesit-language-source-alist '(heex . ("https://github.com/phoenixframework/tree-sitter-heex" "main" "src")))
-  )
-
-(use-package! typescript-ts-mode
-  :mode (("\\.ts\\'" . typescript-ts-mode)
-         ("\\.tsx\\'" . tsx-ts-mode))
-  :config
-  (add-hook! '(typescript-ts-mode-hook tsx-ts-mode-hook) #'lsp!))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;; combobulate ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; should have another go at getting this running now that
-;; treesit + lsp is working for typescript
-
-;; `M-x combobulate' (default: `C-c o o') to start using Combobulate
-;; (use-package treesit
-;;   :preface
-;;   (defun mp-setup-install-grammars ()
-;;     "Install Tree-sitter grammars if they are absent."
-;;     (interactive)
-;;     (dolist (grammar
-;;              '((css "https://github.com/tree-sitter/tree-sitter-css")
-;;                (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
-;;                (python "https://github.com/tree-sitter/tree-sitter-python")
-;;                (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
-;;                (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
-;;       (add-to-list 'treesit-language-source-alist grammar)
-;;       ;; Only install `grammar' if we don't already have it
-;;       ;; installed. However, if you want to *update* a grammar then
-;;       ;; this obviously prevents that from happening.
-;;       (unless (treesit-language-available-p (car grammar))
-;;         (treesit-install-language-grammar (car grammar)))))
-
-;;   ;; Optional, but recommended. Tree-sitter enabled major modes are
-;;   ;; distinct from their ordinary counterparts.
-;;   ;;
-;;   ;; You can remap major modes with `major-mode-remap-alist'. Note
-;;   ;; that this does *not* extend to hooks! Make sure you migrate them
-;;   ;; also
-;;   (dolist (mapping '((python-mode . python-ts-mode)
-;;                      (css-mode . css-ts-mode)
-;;                      (typescript-mode . tsx-ts-mode)
-;;                      (js-mode . js-ts-mode)
-;;                      (css-mode . css-ts-mode)
-;;                      (yaml-mode . yaml-ts-mode)))
-;;     (add-to-list 'major-mode-remap-alist mapping))
-
-;;   :config
-;;   (mp-setup-install-grammars))
-
-;; Do not forget to customize Combobulate to your liking:
-;;
-;;  M-x customize-group RET combobulate RET
-;;
-;; (use-package combobulate
-;;   :after (treesit)
-;;   :preface
-;;   ;; You can customize Combobulate's key prefix here.
-;;   ;; Note that you may have to restart Emacs for this to take effect!
-;;   (setq combobulate-key-prefix "C-c o")
-
-;;   ;; Optional, but recommended.
-;;   ;;
-;;   ;; You can manually enable Combobulate with `M-x
-;;   ;; combobulate-mode'.
-;;   :hook ((python-ts-mode . combobulate-mode)
-;;          (js-ts-mode . combobulate-mode)
-;;          (css-ts-mode . combobulate-mode)
-;;          (yaml-ts-mode . combobulate-mode)
-;;          (typescript-ts-mode . combobulate-mode)
-;;          (tsx-ts-mode . combobulate-mode))
-;;   ;; Amend this to the directory where you keep Combobulate's source
-;;   ;; code.
-;;   :load-path ("/Users/mccraig/.emacs.d/.local/combobulate"))
+  (use-package! aidermacs
+    :bind (("C-c a" . aidermacs-transient-menu))
+    :config
+                                        ; Set API_KEY in .bashrc, that will automatically picked up by aider or in elisp
+    (setenv "ANTHROPIC_API_KEY" mccraigmccraig-anthropic-api-key)
+                                        ; defun my-get-openrouter-api-key yourself elsewhere for security reasons
+    (setenv "OPENAI_API_KEY" mccraigmccraig-openai-api-key)
+    :custom
+                                        ; See the Configuration section below
+    ;; (aidermacs-use-architect-mode t)
+    (aidermacs-default-model "sonnet")))
