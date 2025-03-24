@@ -489,21 +489,46 @@
                 lsp-ui-doc-include-signature t       ; Show signature
                 lsp-ui-doc-position 'at-point))
 
+(use-package lsp-eslint
+  :demand t
+  :after lsp-mode)
+
+;;; APHELEIA
+;; auto-format different source code files extremely intelligently
+;; https://github.com/radian-software/apheleia
+(use-package apheleia
+  :ensure apheleia
+  :diminish ""
+  :defines
+  apheleia-formatters
+  apheleia-mode-alist
+  :functions
+  apheleia-global-mode
+  :config
+  (setf (alist-get 'prettier-json apheleia-formatters)
+        '("prettier" "--stdin-filepath" filepath))
+  (apheleia-global-mode +1))
+
+
 
 ;; aidermacs
 
-;; (after! epa
+(after! epa
 
-;;   (load-library "/Users/mccraigmccraig/.doom.d/secrets.el.gpg")
+  ;; gather the key password in the minibuffer
+  (setq epg-pinentry-mode 'loopback)
+  ;; this causes a "symbol's value as variable is void -----BEGIN" lint
+  ;; error, but it's fine - because the file gets auto-decrypted
+  (load-library "/Users/mccraigmccraig/.doom.d/secrets.el.gpg")
 
-;;   (use-package! aidermacs
-;;     :bind (("C-c a" . aidermacs-transient-menu))
-;;     :config
-;;                                         ; Set API_KEY in .bashrc, that will automatically picked up by aider or in elisp
-;;     (setenv "ANTHROPIC_API_KEY" mccraigmccraig-anthropic-api-key)
-;;                                         ; defun my-get-openrouter-api-key yourself elsewhere for security reasons
-;;     (setenv "OPENAI_API_KEY" mccraigmccraig-openai-api-key)
-;;     :custom
-;;                                         ; See the Configuration section below
-;;     ;; (aidermacs-use-architect-mode t)
-;;     (aidermacs-default-model "sonnet")))
+  (use-package! aidermacs
+    :bind (("C-c a" . aidermacs-transient-menu))
+    :config
+                                        ; Set API_KEY in .bashrc, that will automatically picked up by aider or in elisp
+    (setenv "ANTHROPIC_API_KEY" mccraigmccraig-anthropic-api-key)
+                                        ; defun my-get-openrouter-api-key yourself elsewhere for security reasons
+    (setenv "OPENAI_API_KEY" mccraigmccraig-openai-api-key)
+    :custom
+                                        ; See the Configuration section below
+    ;; (aidermacs-use-architect-mode t)
+    (aidermacs-default-model "sonnet")))
