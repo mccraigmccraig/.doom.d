@@ -176,52 +176,14 @@
 ;;;;;;;;; modeline
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; the doom default is `relative-from-project, but that
-;; often causes stuff on the RH end of the modeline to get knocked
-;; off when showing 3 windows side-by-side,
-;; so this is more compact
-;; https://github.com/seagle0128/doom-modeline
-;;
-;;(setq doom-modeline-buffer-file-name-style 'truncate-with-project)
-;;(setq doom-modeline-buffer-file-name-style 'auto)
-;;(setq doom-modeline-buffer-file-name-style 'relative-to-project)
-
 ;; display ace-window key in the modeline
 ;; using +light modeline now, so +modeline-ace-window below
 ;; is also required
 (ace-window-display-mode)
 
-;; TODO don't work after upgrade
-;; (def-modeline-var! +modeline-ace-window
-;;   '(:eval (window-parameter (selected-window) 'ace-window-path)))
-
-;; custom +light modeline (using +light option rather than full doom-modeline)
-;; modified from
-;; https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/modeline/%2Blight.el#L525
-;; to move flycheck left to prominence and add ace-window-path
-;; (def-modeline! :main
-;;   `(" "
-;;     +modeline-ace-window
-;;     " "
-;;     (+modeline-checker ("" +modeline-checker " "))
-;;     +modeline-matches
-;;     +modeline-buffer-identification
-;;     +modeline-position)
-;;   `(""
-;;     mode-line-misc-info
-;;     +modeline-modes
-;;     (vc-mode ("  "
-;;               , ;; (all-the-icons-octicon "git-branch" :v-adjust 0.0)
-;;               vc-mode " "))
-;;     "  "
-;;     +modeline-encoding))
-
-;; (set-modeline! :main 'default)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;; bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 ;; give smartparens strict-mode a binding
 (map!
@@ -261,26 +223,6 @@
   :map flycheck-command-map
   "l" #'consult-flycheck))
 
-;; (with-eval-after-load 'eglot
-;;   (setf (alist-get '(elixir-mode elixir-ts-mode heex-ts-mode)
-;;                    eglot-server-programs
-;;                    nil nil #'equal)
-;;         (if (and (fboundp 'w32-shell-dos-semantics)
-;;                  (w32-shell-dos-semantics))
-;;             '("language_server.bat")
-;;           (eglot-alternatives
-;;            '("/Users/mccraigmccraig/bin/lexical/_build/dev/package/lexical/bin/start_lexical.sh")))))
-
-;; ;; this doesn't set up the auto-mode-alist mappings for
-;; ;; elixir unfortunately - the elixir-mode stuff clashes
-;; ;; and overrides...
-;; (use-package! elixir-ts-mode
-;;   :mode (("\\.heex\\'" . heex-ts-mode)
-;;          ("\\.ex\\'" . elixir-ts-mode))
-
-;;   :config
-;;   (add-hook! '(elixir-ts-mode-hook) #'lsp!))
-
 ;; treesit
 
 (use-package treesit
@@ -294,10 +236,12 @@
          ("\\.json\\'" .  json-ts-mode)
          ("\\.Dockerfile\\'" . dockerfile-ts-mode)
          ("\\.prisma\\'" . prisma-ts-mode)
+
+         ;; More modes defined here...
+
          ("\\.ex\\'" . elixir-ts-mode)
          ("\\.exs\\'" . elixir-ts-mode)
          ("\\.heex\\'" . heex-ts-mode)
-         ;; More modes defined here...
          )
   :preface
   (defun os/setup-install-grammars ()
@@ -322,8 +266,10 @@
                (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.20.3" "typescript/src"))
                (yaml . ("https://github.com/ikatyang/tree-sitter-yaml" "v0.5.0"))
                (prisma "https://github.com/victorhqc/tree-sitter-prisma")
+               ;; 
                (elixir . ("https://github.com/elixir-lang/tree-sitter-elixir" "v0.3.4" "src"))
-               (heex . ("https://github.com/phoenixframework/tree-sitter-heex" "v0.8.0" "src"))))
+               (heex . ("https://github.com/phoenixframework/tree-sitter-heex" "v0.8.0" "src"))
+               ))
       (add-to-list 'treesit-language-source-alist grammar)
       ;; Only install `grammar' if we don't already have it
       ;; installed. However, if you want to *update* a grammar then
@@ -352,7 +298,7 @@
              (js-json-mode . json-ts-mode)
              (sh-mode . bash-ts-mode)
              (sh-base-mode . bash-ts-mode)
-             (elixir-mode . elixir-ts-mode)
+             ;; (elixir-mode . elixir-ts-mode)
              ))
     (add-to-list 'major-mode-remap-alist mapping))
   :config
@@ -472,7 +418,17 @@
   (lsp-semantic-tokens-enable nil)      ; Related to highlighting, and we defer to treesitter
 
   :init
-  (setq lsp-use-plists t))
+  ;; need to wrap the language servers for this
+  ;; (setq lsp-use-plists t)
+  )
+
+(after! lsp-mode
+  ;; elixir-mode doesn't seem to work very well on emacs30... but
+  ;; running lexical in elixir-ts-mode seems fine
+  (lsp-register-client (make-lsp-client
+                        :new-connection (lsp-stdio-connection "/Users/mccraigmccraig/bin/lexical/_build/dev/package/lexical/bin/start_lexical.sh")
+                        :activation-fn (lsp-activate-on "elixir")
+                        :server-id 'lexical-ls)))
 
 (use-package lsp-completion
   :no-require
@@ -511,8 +467,6 @@
   (setf (alist-get 'prettier-json apheleia-formatters)
         '("prettier" "--stdin-filepath" filepath))
   (apheleia-global-mode +1))
-
-
 
 ;; aidermacs
 
