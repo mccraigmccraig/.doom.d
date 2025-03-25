@@ -539,3 +539,14 @@
 ;;   (defadvice ediff-regions-wordwise (before ediff-regions-wordwise-advice activate)
 ;;     (setq my-ediff-last-windows (current-window-configuration)))
 ;;   )
+
+
+(use-package! org-roam
+  :custom
+  (org-roam-directory "/Users/mccraigmccraig/doc/logseq/")
+  (org-roam-dailies-directory "journals/")
+  (org-roam-capture-templates
+   '(("d" "default" plain
+      "%?" :target
+      (file+head "pages/${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t))))
