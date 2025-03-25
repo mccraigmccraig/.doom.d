@@ -75,5 +75,4 @@
 
 (package! flycheck-clj-kondo)
 
-(package! aidermacs)
-
+(package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs"))
