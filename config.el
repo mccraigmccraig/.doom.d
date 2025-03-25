@@ -428,7 +428,11 @@
   (lsp-register-client (make-lsp-client
                         :new-connection (lsp-stdio-connection "/Users/mccraigmccraig/bin/lexical/_build/dev/package/lexical/bin/start_lexical.sh")
                         :activation-fn (lsp-activate-on "elixir")
-                        :server-id 'lexical-ls)))
+                        :server-id 'lexical-ls))
+
+  ;; Add hooks to automatically start LSP for Elixir files
+  (add-hook 'elixir-ts-mode-hook #'lsp-deferred)
+  (add-hook 'heex-ts-mode-hook #'lsp-deferred))
 
 (use-package lsp-completion
   :no-require
