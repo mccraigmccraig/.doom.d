@@ -504,3 +504,30 @@
                                         ; See the Configuration section below
     ;; (aidermacs-use-architect-mode t)
     (aidermacs-default-model "sonnet")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;; ediff
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package! ediff
+  :config
+  ;; Save window configuration before ediff and restore it when ediff quits
+  (defvar my-ediff-last-windows nil)
+  
+  (defun my-store-pre-ediff-winconfig ()
+    "Store window configuration before ediff."
+    (setq my-ediff-last-windows (current-window-configuration)))
+  
+  (defun my-restore-pre-ediff-winconfig ()
+    "Restore window configuration after ediff."
+    (when my-ediff-last-windows
+      (set-window-configuration my-ediff-last-windows)
+      (setq my-ediff-last-windows nil)))
+  
+  (add-hook 'ediff-before-setup-hook #'my-store-pre-ediff-winconfig)
+  (add-hook 'ediff-quit-hook #'my-restore-pre-ediff-winconfig 'append)
+  (add-hook 'ediff-suspend-hook #'my-restore-pre-ediff-winconfig 'append)
+  
+  ;; Additional ediff customizations
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain) ; Don't use a separate frame
+  (setq ediff-split-window-function 'split-window-horizontally)) ; Split horizontally by default
