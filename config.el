@@ -225,7 +225,7 @@
 
 ;; treesit
 
-(use-package treesit
+(use-package! treesit
   :mode (("\\.tsx\\'" . tsx-ts-mode)
          ("\\.js\\'"  . typescript-ts-mode)
          ("\\.mjs\\'" . typescript-ts-mode)
@@ -302,26 +302,25 @@
              ))
     (add-to-list 'major-mode-remap-alist mapping))
   :config
-  (os/setup-install-grammars)
+  (os/setup-install-grammars))
 
+;; Do not forget to customize Combobulate to your liking:
+;;
+;;  M-x customize-group RET combobulate RET
+;;
+(use-package! combobulate
+  :custom
+  ;; You can customize Combobulate's key prefix here.
+  ;; Note that you may have to restart Emacs for this to take effect!
+  (combobulate-key-prefix "C-c o")
+  :hook ((prog-mode . combobulate-mode))
+  ;; Amend this to the directory where you keep Combobulate's source
+  ;; code.
+  :load-path ("/Users/mccraigmccraig/lib/combobulate"))
 
-  ;; Do not forget to customize Combobulate to your liking:
-  ;;
-  ;;  M-x customize-group RET combobulate RET
-  ;;
-  (use-package combobulate
-    :custom
-    ;; You can customize Combobulate's key prefix here.
-    ;; Note that you may have to restart Emacs for this to take effect!
-    (combobulate-key-prefix "C-c o")
-    :hook ((prog-mode . combobulate-mode))
-    ;; Amend this to the directory where you keep Combobulate's source
-    ;; code.
-    :load-path ("/Users/mccraigmccraig/lib/combobulate")))
 
  ;;;; Code Completion
-(use-package corfu
-  :ensure t
+(use-package! corfu
   ;; Optional customizations
   :custom
   (corfu-cycle t)                 ; Allows cycling through candidates
@@ -355,16 +354,14 @@
             nil
             t))
 
-(use-package flycheck
-  :ensure t
+(use-package! flycheck
   :init (global-flycheck-mode)
   :bind (:map flycheck-mode-map
               ("M-n" . flycheck-next-error) ; optional but recommended error navigation
               ("M-p" . flycheck-previous-error)))
 
-(use-package lsp-mode
+(use-package! lsp-mode
   :diminish "LSP"
-  :ensure t
   :hook ((lsp-mode . lsp-diagnostics-mode)
          (lsp-mode . lsp-enable-which-key-integration)
          ((tsx-ts-mode
@@ -416,6 +413,7 @@
   (lsp-lens-enable nil)                 ; Optional, I don't need it
   ;; semantic
   (lsp-semantic-tokens-enable nil)      ; Related to highlighting, and we defer to treesitter
+  
 
   :init
   ;; need to wrap the language servers for this
@@ -423,23 +421,28 @@
   )
 
 (after! lsp-mode
+  ;; identify elixir files by mode
+  (add-to-list 'lsp-language-id-configuration '(elixir-ts-mode . "elixir"))
+  (add-to-list 'lsp-language-id-configuration '(heex-ts-mode . "elixir"))
+
   ;; elixir-mode doesn't seem to work very well on emacs30... but
   ;; running lexical in elixir-ts-mode seems fine
   (lsp-register-client (make-lsp-client
                         :new-connection (lsp-stdio-connection "/Users/mccraigmccraig/bin/lexical/_build/dev/package/lexical/bin/start_lexical.sh")
                         :activation-fn (lsp-activate-on "elixir")
+                        :priority 1
+                        ;; :major-modes '(elixir-ts-mode heex-ts-mode)
                         :server-id 'lexical-ls))
 
   ;; Add hooks to automatically start LSP for Elixir files
-  (add-hook 'elixir-ts-mode-hook #'lsp-deferred)
-  (add-hook 'heex-ts-mode-hook #'lsp-deferred))
+  (add-hook 'elixir-ts-mode-hook 'lsp)
+  (add-hook 'heex-ts-mode-hook 'lsp))
 
-(use-package lsp-completion
+(use-package! lsp-completion
   :no-require
   :hook ((lsp-mode . lsp-completion-mode)))
 
-(use-package lsp-ui
-  :ensure t
+(use-package! lsp-ui
   :commands
   (lsp-ui-doc-show
    lsp-ui-doc-glance)
@@ -452,15 +455,14 @@
                 lsp-ui-doc-include-signature t       ; Show signature
                 lsp-ui-doc-position 'at-point))
 
-(use-package lsp-eslint
+(use-package! lsp-eslint
   :demand t
   :after lsp-mode)
 
 ;;; APHELEIA
 ;; auto-format different source code files extremely intelligently
 ;; https://github.com/radian-software/apheleia
-(use-package apheleia
-  :ensure apheleia
+(use-package! apheleia
   :diminish ""
   :defines
   apheleia-formatters
