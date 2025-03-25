@@ -500,6 +500,9 @@
     (setenv "ANTHROPIC_API_KEY" mccraigmccraig-anthropic-api-key)
                                         ; defun my-get-openrouter-api-key yourself elsewhere for security reasons
     (setenv "OPENAI_API_KEY" mccraigmccraig-openai-api-key)
+
+    ;; don't show the ediff - it blows away window config, and there is magit
+    (setq aidermacs-show-diff-after-change nil)
     :custom
                                         ; See the Configuration section below
     ;; (aidermacs-use-architect-mode t)
