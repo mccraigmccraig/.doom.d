@@ -509,25 +509,30 @@
 ;;;;;;;;; ediff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package! ediff
-  :config
-  ;; Save window configuration before ediff and restore it when ediff quits
-  (defvar my-ediff-last-windows nil)
-  
-  (defun my-store-pre-ediff-winconfig ()
-    "Store window configuration before ediff."
-    (setq my-ediff-last-windows (current-window-configuration)))
-  
-  (defun my-restore-pre-ediff-winconfig ()
-    "Restore window configuration after ediff."
-    (when my-ediff-last-windows
-      (set-window-configuration my-ediff-last-windows)
-      (setq my-ediff-last-windows nil)))
-  
-  (add-hook 'ediff-before-setup-hook #'my-store-pre-ediff-winconfig)
-  (add-hook 'ediff-quit-hook #'my-restore-pre-ediff-winconfig 'append)
-  (add-hook 'ediff-suspend-hook #'my-restore-pre-ediff-winconfig 'append)
-  
-  ;; Additional ediff customizations
-  (setq ediff-window-setup-function 'ediff-setup-windows-plain) ; Don't use a separate frame
-  (setq ediff-split-window-function 'split-window-horizontally)) ; Split horizontally by default
+;; this completely fails to restore buffer arrangement after
+;; aidermacs ediff... 
+
+;; (use-package! ediff
+;;   :config
+
+;;   (defvar my-ediff-last-windows nil
+;;     "Window configuration prior to calling `ediff-buffers',
+;; `ediff-regions-linewise', or `ediff-regions-wordwise'.")
+
+;;   (defun my-ediff-restore-last-windows ()
+;;     "Set window configuration to `my-ediff-last-windows'."
+;;     (cond (my-ediff-last-windows
+;;            (set-window-configuration my-ediff-last-windows)
+;;            (setq my-ediff-last-windows nil))))
+
+;;   (add-hook 'ediff-quit-hook #'my-ediff-restore-last-windows)
+
+;;   (defadvice ediff-buffers (before ediff-buffers-advice activate)
+;;     (setq my-ediff-last-windows (current-window-configuration)))
+
+;;   (defadvice ediff-regions-linewise (before ediff-regions-linewise-advice activate)
+;;     (setq my-ediff-last-windows (current-window-configuration)))
+
+;;   (defadvice ediff-regions-wordwise (before ediff-regions-wordwise-advice activate)
+;;     (setq my-ediff-last-windows (current-window-configuration)))
+;;   )
