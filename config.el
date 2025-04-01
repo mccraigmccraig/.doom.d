@@ -369,22 +369,25 @@
               ("M-n" . flycheck-next-error) ; optional but recommended error navigation
               ("M-p" . flycheck-previous-error)))
 
+;; looks like a lot of the variables in here don't exist anymore, so I
+;; suspect it's borking the package init
 (use-package! lsp-mode
   :diminish "LSP"
-  :hook ((lsp-mode . lsp-diagnostics-mode)
-         (lsp-mode . lsp-enable-which-key-integration)
-         ((tsx-ts-mode
-           typescript-ts-mode
-           js-ts-mode) . lsp-deferred))
+  ;; ;; something about these :hooks is breaking lsp-mode... need to dig into it
+  ;; :hook ((lsp-mode . lsp-diagnostics-mode)
+  ;;        (lsp-mode . lsp-enable-which-key-integration)
+  ;;        ((tsx-ts-mode
+  ;;          typescript-ts-mode
+  ;;          js-ts-mode) . lsp-deferred))
   :custom
   (lsp-keymap-prefix "C-c l")           ; Prefix for LSP actions
   (lsp-completion-provider :none)       ; Using Corfu as the provider
-  (lsp-diagnostics-provider :flycheck)
+  ;; (lsp-diagnostics-provider :flycheck)
   (lsp-session-file (locate-user-emacs-file ".lsp-session"))
   (lsp-log-io nil)                      ; IMPORTANT! Use only for debugging! Drastically affects performance
   (lsp-keep-workspace-alive nil)        ; Close LSP server if all project buffers are closed
   (lsp-idle-delay 0.5)                  ; Debounce timer for `after-change-function'
-  ;; core
+  ;; ;; core
   (lsp-enable-xref t)                   ; Use xref to find references
   (lsp-auto-configure t)                ; Used to decide between current active servers
   (lsp-eldoc-enable-hover t)            ; Display signature information in the echo area
@@ -399,41 +402,37 @@
   (lsp-enable-symbol-highlighting t)     ; Shows usages of symbol at point in the current buffer
   (lsp-enable-text-document-color nil)   ; This is Treesitter's job
 
-  (lsp-ui-sideline-show-hover nil)      ; Sideline used only for diagnostics
-  (lsp-ui-sideline-diagnostic-max-lines 20) ; 20 lines since typescript errors can be quite big
-  ;; completion
+  ;; (lsp-ui-sideline-show-hover nil)      ; Sideline used only for diagnostics
+  ;; (lsp-ui-sideline-diagnostic-max-lines 20) ; 20 lines since typescript errors can be quite big
+  ;; ;; completion
   (lsp-completion-enable t)
-  (lsp-completion-enable-additional-text-edit t) ; Ex: auto-insert an import for a completion candidate
+  ;; (lsp-completion-enable-additional-text-edit t) ; Ex: auto-insert an import for a completion candidate
   (lsp-enable-snippet t)                         ; Important to provide full JSX completion
-  (lsp-completion-show-kind t)                   ; Optional
-  ;; headerline
+  ;; (lsp-completion-show-kind t)                   ; Optional
+  ;; ;; headerline
   (lsp-headerline-breadcrumb-enable t)  ; Optional, I like the breadcrumbs
-  (lsp-headerline-breadcrumb-enable-diagnostics nil) ; Don't make them red, too noisy
-  (lsp-headerline-breadcrumb-enable-symbol-numbers nil)
-  (lsp-headerline-breadcrumb-icons-enable nil)
-  ;; modeline
+  ;; (lsp-headerline-breadcrumb-enable-diagnostics nil) ; Don't make them red, too noisy
+  ;; (lsp-headerline-breadcrumb-enable-symbol-numbers nil)
+  ;; (lsp-headerline-breadcrumb-icons-enable nil)
+  ;; ;; modeline
   (lsp-modeline-code-actions-enable nil) ; Modeline should be relatively clean
   (lsp-modeline-diagnostics-enable nil)  ; Already supported through `flycheck'
   (lsp-modeline-workspace-status-enable nil) ; Modeline displays "LSP" when lsp-mode is enabled
   (lsp-signature-doc-lines 1)                ; Don't raise the echo area. It's distracting
-  (lsp-ui-doc-use-childframe t)              ; Show docs for symbol at point
+  ;; (lsp-ui-doc-use-childframe) t              ; Show docs for symbol at point
   (lsp-eldoc-render-all nil)            ; This would be very useful if it would respect `lsp-signature-doc-lines', currently it's distracting
-  ;; lens
+  ;; ;; lens
   (lsp-lens-enable nil)                 ; Optional, I don't need it
-  ;; semantic
+  ;; ;; semantic
   (lsp-semantic-tokens-enable nil)      ; Related to highlighting, and we defer to treesitter
-  
+
 
   :init
-  ;; need to wrap the language servers for this
+  ;; ;; need to wrap the language servers for this
   ;; (setq lsp-use-plists t)
   )
 
 (after! lsp-mode
-  ;; identify elixir files by mode
-  (add-to-list 'lsp-language-id-configuration '(elixir-ts-mode . "elixir"))
-  (add-to-list 'lsp-language-id-configuration '(heex-ts-mode . "elixir"))
-
   ;; elixir-mode doesn't seem to work very well on emacs30... but
   ;; running lexical in elixir-ts-mode seems fine
   (lsp-register-client (make-lsp-client
@@ -444,8 +443,10 @@
                         :server-id 'lexical-ls))
 
   ;; Add hooks to automatically start LSP for Elixir files
-  (add-hook 'elixir-ts-mode-hook 'lsp)
-  (add-hook 'heex-ts-mode-hook 'lsp))
+  (add-hook 'elixir-ts-mode-hook 'lsp-deferred)
+  (add-hook 'heex-ts-mode-hook 'lsp-deferred)
+  (add-hook 'typescript-ts-mode-hook 'lsp-deferred)
+  )
 
 (use-package! lsp-completion
   :no-require
@@ -494,15 +495,18 @@
   (load-library "/Users/mccraigmccraig/.doom.d/secrets.el.gpg")
 
   (use-package! aidermacs
-    :bind (("C-c a" . aidermacs-transient-menu))
+    :bind (("C-c b" . aidermacs-transient-menu))
     :config
                                         ; Set API_KEY in .bashrc, that will automatically picked up by aider or in elisp
     (setenv "ANTHROPIC_API_KEY" mccraigmccraig-anthropic-api-key)
                                         ; defun my-get-openrouter-api-key yourself elsewhere for security reasons
     (setenv "OPENAI_API_KEY" mccraigmccraig-openai-api-key)
 
+    (setenv "GEMINI_API_KEY" mccraigmccraig-openai-api-key)
+
     ;; don't show the ediff - it blows away window config, and there is magit
     (setq aidermacs-show-diff-after-change nil)
+    
     :custom
                                         ; See the Configuration section below
     ;; (aidermacs-use-architect-mode t)
