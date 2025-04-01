@@ -52,6 +52,7 @@
 ;; modus themes, including some nice black-background themes
 ;; https://protesilaos.com/emacs/modus-themes
 (package! modus-themes)
+(package! ef-themes)
 
 ;; all the themes from https://emacsthemes.com/tags/black/9.html
 ;; tagged 'black' which have an actual black background
