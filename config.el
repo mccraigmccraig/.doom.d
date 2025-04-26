@@ -422,7 +422,7 @@
   ;; (lsp-ui-doc-use-childframe) t              ; Show docs for symbol at point
   (lsp-eldoc-render-all nil)            ; This would be very useful if it would respect `lsp-signature-doc-lines', currently it's distracting
   ;; ;; lens
-  (lsp-lens-enable nil)                 ; Optional, I don't need it
+  (lsp-lens-enable t)                 ; Optional, I don't need it
   ;; ;; semantic
   (lsp-semantic-tokens-enable nil)      ; Related to highlighting, and we defer to treesitter
 
