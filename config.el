@@ -486,31 +486,23 @@
 
 ;; aidermacs
 
-(after! epa
+(use-package! aidermacs
+  :bind (("C-c b" . aidermacs-transient-menu))
+  :config
+  ;; Set API_KEY in .bashrc, that will automatically picked up by aider or in elisp
+  (setenv "ANTHROPIC_API_KEY" (auth-source-pick-first-password :host "api.anthropic.com"))
+  ;; defun my-get-openrouter-api-key yourself elsewhere for security reasons
+  (setenv "OPENAI_API_KEY" (auth-source-pick-first-password :host "api.openai.com"))
 
-  ;; gather the key password in the minibuffer
-  (setq epg-pinentry-mode 'loopback)
-  ;; this causes a "symbol's value as variable is void -----BEGIN" lint
-  ;; error, but it's fine - because the file gets auto-decrypted
-  (load-library "/Users/mccraigmccraig/.doom.d/secrets.el.gpg")
+  (setenv "GEMINI_API_KEY" (auth-source-pick-first-password :host "generativelanguage.googleapis.com"))
 
-  (use-package! aidermacs
-    :bind (("C-c b" . aidermacs-transient-menu))
-    :config
-                                        ; Set API_KEY in .bashrc, that will automatically picked up by aider or in elisp
-    (setenv "ANTHROPIC_API_KEY" mccraigmccraig-anthropic-api-key)
-                                        ; defun my-get-openrouter-api-key yourself elsewhere for security reasons
-    (setenv "OPENAI_API_KEY" mccraigmccraig-openai-api-key)
+  ;; don't show the ediff - it blows away window config, and there is magit
+  (setq aidermacs-show-diff-after-change nil)
 
-    (setenv "GEMINI_API_KEY" mccraigmccraig-openai-api-key)
-
-    ;; don't show the ediff - it blows away window config, and there is magit
-    (setq aidermacs-show-diff-after-change nil)
-    
-    :custom
+  :custom
                                         ; See the Configuration section below
-    ;; (aidermacs-use-architect-mode t)
-    (aidermacs-default-model "sonnet")))
+  ;; (aidermacs-use-architect-mode t)
+  (aidermacs-default-model "sonnet"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;; ediff
