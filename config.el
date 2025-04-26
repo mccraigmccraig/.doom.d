@@ -554,3 +554,6 @@
       "%?" :target
       (file+head "pages/${slug}.org" "#+title: ${title}\n")
       :unnarrowed t))))
+
+(use-package forge
+  :after magit)
