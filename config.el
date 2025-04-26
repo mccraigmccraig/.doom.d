@@ -442,10 +442,26 @@
                         ;; :major-modes '(elixir-ts-mode heex-ts-mode)
                         :server-id 'lexical-ls))
 
+  (load-library "/Users/mccraigmccraig/.doom.d/koka-mode.el")
+
+  (lsp-register-client (make-lsp-client
+                        :new-connection
+                        (lsp-stdio-connection '("koka" "--language-server" "--lsstdio" "-icommunity/std" "-icommunity/parsing" "-isrc"))
+
+                        :activation-fn (lsp-activate-on "koka")
+                        :priority 1
+                        ;; :major-modes '(elixir-ts-mode heex-ts-mode)
+                        :server-id 'koka-ls))
+
+  (add-to-list 'lsp-language-id-configuration '(koka-mode . "koka"))
+
+
   ;; Add hooks to automatically start LSP for Elixir files
   (add-hook 'elixir-ts-mode-hook 'lsp-deferred)
   (add-hook 'heex-ts-mode-hook 'lsp-deferred)
   (add-hook 'typescript-ts-mode-hook 'lsp-deferred)
+  (add-hook 'tsx-ts-mode-hook 'lsp-deferred)
+  (add-hook 'koka-mode-hook 'lsp-deferred)
   )
 
 (use-package! lsp-completion
