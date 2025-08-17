@@ -3,10 +3,12 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
+
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 ;; (setq user-full-name "John Doe"
 ;;       user-mail-address "john@doe.com")
+
 (setq user-full-name "mccraigmccraig of the clan mccraig"
       user-mail-address "mccraigmccraig@gmail.com")
 
@@ -22,6 +24,9 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
+;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+
 (setq doom-font (font-spec :family "Fira Code" :size 12)
       doom-variable-pitch-font (font-spec :family "Fira Code" :size 13))
 
@@ -30,13 +35,10 @@
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
 
-;; don't forget to load Doom modeline icon fonts with:
-;; M-x nerd-icons-install-fonts
-
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;; (setq doom-theme 'distinguished)
+;; (setq doom-theme 'doom-one)
 (setq doom-theme 'modus-vivendi)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -219,6 +221,7 @@
  ;; when going for C-` +popup/toggle
  "C-z" nil)
 
+
 (map!
  ;; don't show the messages buffer on minibuffer click
  (:map minibuffer-inactive-mode-map
@@ -231,6 +234,11 @@
  (:after flycheck
   :map flycheck-command-map
   "l" #'consult-flycheck))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;; packages
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; treesit
 
@@ -275,7 +283,7 @@
                (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.20.3" "typescript/src"))
                (yaml . ("https://github.com/ikatyang/tree-sitter-yaml" "v0.5.0"))
                (prisma "https://github.com/victorhqc/tree-sitter-prisma")
-               ;; 
+               ;;
                (elixir . ("https://github.com/elixir-lang/tree-sitter-elixir" "v0.3.4" "src"))
                (heex . ("https://github.com/phoenixframework/tree-sitter-heex" "v0.8.0" "src"))
                ))
@@ -317,15 +325,15 @@
 ;;
 ;;  M-x customize-group RET combobulate RET
 ;;
-(use-package! combobulate
-  :custom
-  ;; You can customize Combobulate's key prefix here.
-  ;; Note that you may have to restart Emacs for this to take effect!
-  (combobulate-key-prefix "C-c o")
-  :hook ((prog-mode . combobulate-mode))
-  ;; Amend this to the directory where you keep Combobulate's source
-  ;; code.
-  :load-path ("/Users/mccraigmccraig/lib/combobulate"))
+;; (use-package! combobulate
+;;   :custom
+;;   ;; You can customize Combobulate's key prefix here.
+;;   ;; Note that you may have to restart Emacs for this to take effect!
+;;   (combobulate-key-prefix "C-c o")
+;;   :hook ((prog-mode . combobulate-mode))
+;;   ;; Amend this to the directory where you keep Combobulate's source
+;;   ;; code.
+;;   :load-path ("/Users/mccraigmccraig/lib/combobulate"))
 
 
  ;;;; Code Completion
@@ -442,18 +450,18 @@
                         ;; :major-modes '(elixir-ts-mode heex-ts-mode)
                         :server-id 'lexical-ls))
 
-  (load-library "/Users/mccraigmccraig/.doom.d/koka-mode.el")
+  ;; (load-library "/Users/mccraigmccraig/.doom.d/koka-mode.el")
 
-  (lsp-register-client (make-lsp-client
-                        :new-connection
-                        (lsp-stdio-connection '("koka" "--language-server" "--lsstdio" "-icommunity/std" "-icommunity/parsing" "-isrc"))
+  ;; (lsp-register-client (make-lsp-client
+  ;;                       :new-connection
+  ;;                       (lsp-stdio-connection '("koka" "--language-server" "--lsstdio" "-icommunity/std" "-icommunity/parsing" "-isrc"))
 
-                        :activation-fn (lsp-activate-on "koka")
-                        :priority 1
-                        ;; :major-modes '(elixir-ts-mode heex-ts-mode)
-                        :server-id 'koka-ls))
+  ;;                       :activation-fn (lsp-activate-on "koka")
+  ;;                       :priority 1
+  ;;                       ;; :major-modes '(elixir-ts-mode heex-ts-mode)
+  ;;                       :server-id 'koka-ls))
 
-  (add-to-list 'lsp-language-id-configuration '(koka-mode . "koka"))
+  ;; (add-to-list 'lsp-language-id-configuration '(koka-mode . "koka"))
 
 
   ;; Add hooks to automatically start LSP for Elixir files
@@ -461,7 +469,7 @@
   (add-hook 'heex-ts-mode-hook 'lsp-deferred)
   (add-hook 'typescript-ts-mode-hook 'lsp-deferred)
   (add-hook 'tsx-ts-mode-hook 'lsp-deferred)
-  (add-hook 'koka-mode-hook 'lsp-deferred)
+  ;;(add-hook 'koka-mode-hook 'lsp-deferred)
   )
 
 (use-package! lsp-completion
@@ -502,66 +510,35 @@
 
 ;; aidermacs
 
-(use-package! aidermacs
-  :bind (("C-c b" . aidermacs-transient-menu))
-  :config
-  ;; Set API_KEY in .bashrc, that will automatically picked up by aider or in elisp
-  (setenv "ANTHROPIC_API_KEY" (auth-source-pick-first-password :host "api.anthropic.com"))
-  ;; defun my-get-openrouter-api-key yourself elsewhere for security reasons
-  (setenv "OPENAI_API_KEY" (auth-source-pick-first-password :host "api.openai.com"))
-
-  (setenv "GEMINI_API_KEY" (auth-source-pick-first-password :host "generativelanguage.googleapis.com"))
-
-  ;; don't show the ediff - it blows away window config, and there is magit
-  (setq aidermacs-show-diff-after-change nil)
-
-  :custom
-                                        ; See the Configuration section below
-  ;; (aidermacs-use-architect-mode t)
-  (aidermacs-default-model "sonnet"))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;; ediff
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; this completely fails to restore buffer arrangement after
-;; aidermacs ediff... 
-
-;; (use-package! ediff
+;; (use-package! aidermacs
+;;   :bind (("C-c b" . aidermacs-transient-menu))
 ;;   :config
+;;   ;; Set API_KEY in .bashrc, that will automatically picked up by aider or in elisp
+;;   (setenv "ANTHROPIC_API_KEY" (auth-source-pick-first-password :host "api.anthropic.com"))
+;;   ;; defun my-get-openrouter-api-key yourself elsewhere for security reasons
+;;   (setenv "OPENAI_API_KEY" (auth-source-pick-first-password :host "api.openai.com"))
 
-;;   (defvar my-ediff-last-windows nil
-;;     "Window configuration prior to calling `ediff-buffers',
-;; `ediff-regions-linewise', or `ediff-regions-wordwise'.")
+;;   (setenv "GEMINI_API_KEY" (auth-source-pick-first-password :host "generativelanguage.googleapis.com"))
 
-;;   (defun my-ediff-restore-last-windows ()
-;;     "Set window configuration to `my-ediff-last-windows'."
-;;     (cond (my-ediff-last-windows
-;;            (set-window-configuration my-ediff-last-windows)
-;;            (setq my-ediff-last-windows nil))))
+;;   ;; don't show the ediff - it blows away window config, and there is magit
+;;   (setq aidermacs-show-diff-after-change nil)
 
-;;   (add-hook 'ediff-quit-hook #'my-ediff-restore-last-windows)
-
-;;   (defadvice ediff-buffers (before ediff-buffers-advice activate)
-;;     (setq my-ediff-last-windows (current-window-configuration)))
-
-;;   (defadvice ediff-regions-linewise (before ediff-regions-linewise-advice activate)
-;;     (setq my-ediff-last-windows (current-window-configuration)))
-
-;;   (defadvice ediff-regions-wordwise (before ediff-regions-wordwise-advice activate)
-;;     (setq my-ediff-last-windows (current-window-configuration)))
-;;   )
+;;   :custom
+;;   ;; (aidermacs-use-architect-mode t)
+;;   (aidermacs-default-model "sonnet"))
 
 
-(use-package! org-roam
-  :custom
-  (org-roam-directory "/Users/mccraigmccraig/doc/logseq/")
-  (org-roam-dailies-directory "journals/")
-  (org-roam-capture-templates
-   '(("d" "default" plain
-      "%?" :target
-      (file+head "pages/${slug}.org" "#+title: ${title}\n")
-      :unnarrowed t))))
+;; claude-code.el
 
-(use-package forge
-  :after magit)
+(use-package! claude-code
+
+  ;;  :keymap ("C-c x" . claude-code-command-map)
+
+  :config
+  (setq claude-code-terminal-backend 'vterm)
+  (claude-code-mode))
+
+(map!
+ :after claude-code
+ :prefix "C-c"
+ "C-x" claude-code-command-map)

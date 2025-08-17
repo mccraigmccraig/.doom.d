@@ -3,7 +3,6 @@
 
 ;; To install a package with Doom you must declare them here and run 'doom sync'
 ;; on the command line, then restart Emacs for the changes to take effect -- or
-;; use 'M-x doom/reload'.
 
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
@@ -54,30 +53,11 @@
 (package! modus-themes)
 (package! ef-themes)
 
-;; all the themes from https://emacsthemes.com/tags/black/9.html
-;; tagged 'black' which have an actual black background
-;; (package! hemisu-theme)
-;; (package! danneskjold-theme)
-;; (package! dark-krystal-theme)
-;; (package! distinguished-theme)
-;; (package! cherry-blossom-theme)
-;; (package! abyss-theme)
-;; (package! flatland-black-theme)
-;; (package! nyx-theme)
-;; (package! ujelly-theme)
-;; (package! reverse-theme)
-;; (package! purple-haze-theme)
-;; (package! spacemacs-theme)
-
 (package! all-the-icons)
 (package! sqlformat)
 
-;; (package! eslint-fix)
-
 (package! flycheck-clj-kondo)
 
-(package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs"))
-
-(package! org-roam)
-
-(package! exunit)
+(package! claude-code.el
+  :recipe (:type git :host github :repo "stevemolitor/claude-code.el" :branch "main" :depth 1
+           :files ("*.el" (:exclude "images/*"))))
