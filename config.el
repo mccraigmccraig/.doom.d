@@ -240,6 +240,17 @@
 ;;;;;;;;; packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; windresize
+;;;
+;;; interactive window resizing
+
+(use-package! windresize)
+(map!
+ :after windresize
+ :prefix "C-c"
+ :desc "Windresize"
+ "C-w" #'windresize)
+
 ;; treesit
 
 (use-package! treesit
@@ -531,9 +542,6 @@
 ;; claude-code.el
 
 (use-package! claude-code
-
-  ;;  :keymap ("C-c x" . claude-code-command-map)
-
   :config
   (setq claude-code-terminal-backend 'vterm)
   (claude-code-mode))
@@ -541,4 +549,5 @@
 (map!
  :after claude-code
  :prefix "C-c"
+ :desc "Claude Code"
  "C-x" claude-code-command-map)

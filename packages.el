@@ -59,5 +59,11 @@
 (package! flycheck-clj-kondo)
 
 (package! claude-code.el
-  :recipe (:type git :host github :repo "stevemolitor/claude-code.el" :branch "main" :depth 1
+  :recipe (:type git
+           :host github
+           :repo "stevemolitor/claude-code.el"
+           :branch "main"
+           :depth 1
            :files ("*.el" (:exclude "images/*"))))
+
+(package! windresize)
