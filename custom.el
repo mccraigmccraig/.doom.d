@@ -28,7 +28,9 @@
      "7feeed063855b06836e0262f77f5c6d3f415159a98a9676d549bfeb6c49637c4"
      "b5fd9c7429d52190235f2383e47d340d7ff769f141cd8f9e7a4629a81abc6b19"
      "dccf4a8f1aaf5f24d2ab63af1aa75fd9d535c83377f8e26380162e888be0c6a9" default))
- '(package-selected-packages '(aidermacs color-theme-sanityinc-tomorrow)))
+ '(dired-listing-switches "-ahl -v")
+ '(package-selected-packages '(aidermacs color-theme-sanityinc-tomorrow))
+ '(sql-postgres-program "docker-psql"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
