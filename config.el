@@ -240,6 +240,14 @@
 ;;;;;;;;; packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; vterm
+
+(use-package! vterm
+
+  :config
+  (setq vterm-max-scrollback 100000))
+
+
 ;;; windresize
 ;;;
 ;;; interactive window resizing
@@ -543,7 +551,8 @@
 
 (use-package! claude-code
   :config
-  (setq claude-code-terminal-backend 'vterm)
+  ;; (setq claude-code-terminal-backend 'vterm)
+  (setq claude-code-terminal-backend 'eat)
   (claude-code-mode))
 
 (map!
