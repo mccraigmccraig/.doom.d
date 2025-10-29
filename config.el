@@ -560,3 +560,7 @@
  :prefix "C-c"
  :desc "Claude Code"
  "C-x" claude-code-command-map)
+
+;; eat
+;; flicker reducing suggestions
+;; https://codeberg.org/akib/emacs-eat/issues/110
