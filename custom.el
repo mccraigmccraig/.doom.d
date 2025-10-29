@@ -29,6 +29,7 @@
      "b5fd9c7429d52190235f2383e47d340d7ff769f141cd8f9e7a4629a81abc6b19"
      "dccf4a8f1aaf5f24d2ab63af1aa75fd9d535c83377f8e26380162e888be0c6a9" default))
  '(dired-listing-switches "-ahl -v")
+ '(eat-very-visible-cursor-type '(box nil nil))
  '(package-selected-packages '(aidermacs color-theme-sanityinc-tomorrow))
  '(sql-postgres-program "docker-psql"))
 (custom-set-faces
