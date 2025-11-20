@@ -461,13 +461,15 @@
 
 (after! lsp-mode
   ;; elixir-mode doesn't seem to work very well on emacs30... but
-  ;; running lexical in elixir-ts-mode seems fine
+  ;; running lexical in elixir-ts-mode seems fine...
+  ;; lexical is dead now... long live expert
   (lsp-register-client (make-lsp-client
-                        :new-connection (lsp-stdio-connection "/Users/mccraigmccraig/bin/lexical/_build/dev/package/lexical/bin/start_lexical.sh")
+                        ;; (lsp-stdio-connection "/Users/mccraigmccraig/bin/lexical/_build/dev/package/lexical/bin/start_lexical.sh")
+                        :new-connection  (lsp-stdio-connection '("/Users/mccraigmccraig/bin/expert.git/apps/expert/burrito_out/expert_darwin_arm64" "--stdio"))
                         :activation-fn (lsp-activate-on "elixir")
                         :priority 1
                         ;; :major-modes '(elixir-ts-mode heex-ts-mode)
-                        :server-id 'lexical-ls))
+                        :server-id 'expert-ls))
 
   ;; (load-library "/Users/mccraigmccraig/.doom.d/koka-mode.el")
 
@@ -564,3 +566,14 @@
 ;; eat
 ;; flicker reducing suggestions
 ;; https://codeberg.org/akib/emacs-eat/issues/110
+(use-package! eat
+  :config
+
+  (setopt eat-shell-prompt-annotation-delay 0)
+  (setopt eat-very-visible-cursor-type '(t nil nil))
+  (setopt eat-default-cursor-type '(t nil nil))
+
+  (setq process-adaptive-read-buffering nil)
+  (setq read-process-output-max (* 4 1024 1024))
+
+  )
