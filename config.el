@@ -576,4 +576,12 @@
   (setq process-adaptive-read-buffering nil)
   (setq read-process-output-max (* 4 1024 1024))
 
+  (setq eat-term-scrollback-size 500000)
+
+  )
+
+;; don't --group-directories-first - I hates it
+(use-package! dired
+  :config
+  (setq dired-listing-switches "-alh")
   )
