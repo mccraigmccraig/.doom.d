@@ -465,7 +465,7 @@
   ;; lexical is dead now... long live expert
   (lsp-register-client (make-lsp-client
                         ;; (lsp-stdio-connection "/Users/mccraigmccraig/bin/lexical/_build/dev/package/lexical/bin/start_lexical.sh")
-                        :new-connection  (lsp-stdio-connection '("/Users/mccraigmccraig/bin/expert.git/apps/expert/burrito_out/expert_darwin_arm64" "--stdio"))
+                        :new-connection  (lsp-stdio-connection '("/Users/mccraigmccraig/bin/expert" "--stdio"))
                         :activation-fn (lsp-activate-on "elixir")
                         :priority 1
                         ;; :major-modes '(elixir-ts-mode heex-ts-mode)
